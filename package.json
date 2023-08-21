@@ -1,6 +1,6 @@
 {
     "name": "@coaty/consensus.raft",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Raft Consensus Algorithm over Coaty for Node.js and browsers",
     "homepage": "https://github.com/coatyio/consensus.raft.js",
     "repository": {
