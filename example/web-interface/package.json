@@ -1,0 +1,45 @@
+{
+    "name": "raft-example-web-interface",
+    "version": "1.0.0",
+    "description": "Raft over Coaty example web interface",
+    "scripts": {
+        "ng": "ng",
+        "broker": "coaty-scripts broker --nobonjour",
+        "broker:verbose": "coaty-scripts broker --verbose --nobonjour",
+        "build": "ng build",
+        "serve": "ng serve",
+        "start": "ng serve --open",
+        "lint": "ng lint"
+    },
+    "private": true,
+    "dependencies": {
+        "@angular/animations": "^11.2.14",
+        "@angular/cdk": "^11.2.13",
+        "@angular/common": "~11.2.13",
+        "@angular/compiler": "~11.2.13",
+        "@angular/core": "~11.2.13",
+        "@angular/forms": "~11.2.13",
+        "@angular/material": "^11.2.13",
+        "@angular/platform-browser": "~11.2.13",
+        "@angular/platform-browser-dynamic": "~11.2.13",
+        "@angular/router": "~11.2.13",
+        "@coaty/core": "^2.4.1",
+        "rxjs": "~6.6.0",
+        "tslib": "^2.0.0",
+        "zone.js": "~0.11.3"
+    },
+    "devDependencies": {
+        "@angular-builders/custom-webpack": "^11.1.1",
+        "@angular-devkit/build-angular": "~0.1102.12",
+        "@angular/cli": "~11.2.12",
+        "@angular/compiler-cli": "~11.2.13",
+        "@angular/language-service": "~11.2.13",
+        "@types/jasmine": "~3.6.0",
+        "@types/node": "^12.11.1",
+        "codelyzer": "^6.0.0",
+        "shx": "^0.3.3",
+        "ts-node": "~8.3.0",
+        "tslint": "~6.1.0",
+        "typescript": "~4.1.5"
+    }
+}

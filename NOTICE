@@ -1,0 +1,9 @@
+consensus.raft.js
+Copyright 2023 Siemens AG
+
+The Initial Developer of some parts of the library, which are ported from etcd
+Raft (https://github.com/etcd-io/etcd/tree/main/raft), is "The etcd Authors"
+(https://etcd.io/). Copyright 2016 The etcd Authors.
+
+The Initial Developer of the src/@nodeguy/channel/lib is David Braun
+(https://github.com/NodeGuy/channel). Copyright 2017 David Braun.

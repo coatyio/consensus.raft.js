@@ -1,0 +1,242 @@
+<mat-toolbar color="primary" role="heading">
+    <span>Raft Agent {{ agentId }} &#8211; Web Interface</span>
+    <span class="toolbar-spacer"></span>
+    <span><i>{{ connectionState$ | async }}</i></span>
+</mat-toolbar>
+
+<div *ngIf="connectionState$ | async as agentState; else invalidID">
+    <div [ngSwitch]="agentState">
+        <!-- Agent offline -->
+        <div *ngSwitchCase="connectionStateType.AgentOffline" class="vstack-start">
+            <p class="center-text">Waiting for the Raft agent to start</p>
+        </div>
+
+        <!-- Agent online but disconnected from Raft cluster -->
+        <div *ngSwitchCase="connectionStateType.DisconnectedFromRaft" class="vstack-start">
+            <p class="center-text">Click to connect the Raft agent to the Raft cluster</p>
+            <button mat-flat-button color="primary" class="connect-btn" (click)="connect()">
+                Connect
+            </button>
+        </div>
+
+        <!-- Agent connecting to Raft cluster -->
+        <div *ngSwitchCase="connectionStateType.ConnectingToRaft">
+            <div class="spinner">
+                <mat-spinner></mat-spinner>
+                <p class="center-text">Connecting to Raft cluster</p>
+            </div>
+        </div>
+
+        <!-- Agent online and connected to Raft cluster -->
+        <div *ngSwitchDefault class="hstack-main">
+            <!-- Left Column = Set+Delete+Stop+Disconnect -->
+            <div class="column">
+                <!-- Set -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>Set/Update</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>Set or update the value of the specified key in the key value store.</p>
+
+                        <div *ngIf="!setLoading; else setSpinner">
+                            <mat-form-field class="form-field" appearance="fill">
+                                <mat-label>Enter key</mat-label>
+                                <input matInput type="text" [(ngModel)]="setKey" />
+                                <button *ngIf="setKey" matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="setKey = ''">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <mat-form-field class="form-field" appearance="fill">
+                                <mat-label>Enter value</mat-label>
+                                <input matInput type="text" [(ngModel)]="setValue" />
+                                <button *ngIf="setValue" matSuffix mat-icon-button
+                                    aria-label="Clear" (click)="setValue = ''">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <button mat-flat-button color="primary" (click)="set(setKey, setValue)"
+                                [disabled]="setKey === '' || setValue === ''">
+                                Set
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- Delete -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>Delete</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>Delete the specified key from the key value store.</p>
+                        <div *ngIf="!deleteLoading; else deleteSpinner">
+                            <mat-form-field class="form-field" appearance="fill">
+                                <mat-label>Enter key</mat-label>
+                                <input matInput type="text" [(ngModel)]="deleteKey" />
+                                <button *ngIf="deleteKey" matSuffix mat-icon-button
+                                    aria-label="Clear" (click)="deleteKey = ''">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <button mat-flat-button color="primary" (click)="delete(deleteKey)"
+                                [disabled]="deleteKey === ''">
+                                Delete
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- Stop -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>Stop</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>
+                            Stop the Raft agent. This will shutdown this agent without disconnecting
+                            from the cluster and without deleting its persisted state. A stopped
+                            agent behaves like a crashed agent that was restarted from the command
+                            line.
+                        </p>
+                        <button mat-flat-button color="primary" (click)="stop()">Stop</button>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- Disconnect -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>Disconnect</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>
+                            Disconnect the Raft agent from the Raft cluster. This will delete
+                            all persisted state of this agent. If this agent is the last agent
+                            in the cluster this action will shutdown the cluster and permanently
+                            delete the key value stores of all agents.
+                        </p>
+                        <button mat-flat-button color="primary" (click)="disconnect()">
+                            Disconnect
+                        </button>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <!-- Right Column = Cluster+State -->
+            <div class="column">
+                <!-- Cluster -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>Cluster configuration</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>A list of all agents in the current cluster.</p>
+                        <div *ngIf="
+                                raftClusterConfiguration$ | async as clusterConfig;
+                                else clusterSpinner
+                            ">
+                            <mat-chip-list aria-label="Cluster configuration">
+                                <mat-chip *ngFor="let agent of clusterConfig">
+                                    {{ agent }}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- State -->
+                <mat-card class="margin-10">
+                    <mat-card-title>
+                        <mat-card-title>State</mat-card-title>
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <p>
+                            The state shared between all agents of the Raft cluster represents a key
+                            value store.
+                        </p>
+                        <div *ngIf="raftState$ | async as raftState; else stateSpinner">
+                            <table mat-table [dataSource]="raftState">
+                                <!-- Key Column -->
+                                <ng-container matColumnDef="key">
+                                    <th mat-header-cell *matHeaderCellDef>Key</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element[0] }}
+                                    </td>
+                                </ng-container>
+
+                                <!-- Value Column -->
+                                <ng-container matColumnDef="value">
+                                    <th mat-header-cell *matHeaderCellDef>Value</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element[1] }}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="['key', 'value']"></tr>
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="2">store is empty</td>
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: ['key', 'value']"></tr>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <!-- Agent stopping -->
+        <div *ngSwitchCase="connectionStateType.Stopping">
+            <div class="spinner">
+                <mat-spinner></mat-spinner>
+                <p class="center-text">Stopping</p>
+            </div>
+        </div>
+
+        <!-- Agent disconnecting from Raft cluster -->
+        <div *ngSwitchCase="connectionStateType.DisconnectingFromRaft">
+            <div class="spinner">
+                <mat-spinner></mat-spinner>
+                <p class="center-text">Disconnecting from Raft cluster</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #invalidID>
+    <p>Invalid or missing ID. Provide an integer > 0 as argument.</p>
+</ng-template>
+
+<ng-template #setSpinner>
+    <div class="spinner-set-delete">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        <p class="center-text">Proposing set request to Raft cluster</p>
+    </div>
+</ng-template>
+
+<ng-template #deleteSpinner>
+    <div class="spinner-set-delete">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        <p class="center-text">Proposing delete request to Raft cluster</p>
+    </div>
+</ng-template>
+
+<ng-template #stateSpinner>
+    <div class="spinner-set-delete">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        <p class="center-text">Loading Raft state</p>
+    </div>
+</ng-template>
+
+<ng-template #clusterSpinner>
+    <div class="spinner-set-delete">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        <p class="center-text">Loading Raft cluster configuration</p>
+    </div>
+</ng-template>

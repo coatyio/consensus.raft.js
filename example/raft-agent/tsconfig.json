@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "skipLibCheck": true,
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": false,
+        "inlineSourceMap": true,
+        "inlineSources": false,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "lib": [
+            "es2019",
+            "scripthost"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2019"
+    },
+    "compileOnSave": false
+}

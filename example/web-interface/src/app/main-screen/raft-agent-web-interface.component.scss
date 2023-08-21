@@ -1,0 +1,69 @@
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+table {
+    width: 100%;
+}
+
+.form-field {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.column {
+    width: 100%;
+}
+
+.margin-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.vstack-start {
+    width: 60%;
+    height: 40vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hstack-main {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.connect-btn {
+    display: block;
+    width: 100px;
+}
+
+.spinner {
+    width: 60%;
+    height: 70vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner-set-delete {
+    width: 60%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

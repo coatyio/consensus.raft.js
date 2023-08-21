@@ -1,0 +1,34 @@
+{
+    "name": "raft-example-agent",
+    "version": "1.0.0",
+    "description": "Raft over Coaty example agent",
+    "scripts": {
+        "build": "gulp build",
+        "lint": "gulp lint",
+        "lint:fix": "gulp lint:fix",
+        "broker": "coaty-scripts broker --nobonjour",
+        "broker:verbose": "coaty-scripts broker --nobonjour --verbose",
+        "create": "cross-env DEBUG=\"raft-agent:*\" node -r dotenv/config dist/agent.js -c",
+        "join":  "cross-env DEBUG=\"raft-agent:*\" node -r dotenv/config dist/agent.js"
+    },
+    "private": true,
+    "dependencies": {
+        "@coaty/consensus.raft": "^1.0.0",
+        "@coaty/core": "^2.4.1",
+        "cross-env": "^7.0.3",
+        "debug": "^4.3.4",
+        "rxjs": "^6.6.3"
+    },
+    "devDependencies": {
+        "@types/debug": "^4.1.7",
+        "@types/fs-extra": "^9.0.13",
+        "@types/node": "^18.7.23",
+        "dotenv": "^16.0.2",
+        "fs-extra": "^10.1.0",
+        "gulp": "^4.0.2",
+        "gulp-tslint": "^8.1.4",
+        "gulp-typescript": "^6.0.0-alpha.1",
+        "tslint": "^6.1.3",
+        "typescript": "^4.8.4"
+    }
+}
