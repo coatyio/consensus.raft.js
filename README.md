@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/Source%20code-TypeScript-007ACC.svg)](http://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202-blue.svg)](https://opensource.org/licenses/apache-2.0)
 [![release](https://img.shields.io/badge/release-Conventional%20Commits-yellow.svg)](https://conventionalcommits.org/)
-[![npm version](https://badge.fury.io/js/@coaty%2Fconsensus.raft.js.svg)](https://www.npmjs.com/package/@coaty/consensus.raft)
+[![npm version](https://badge.fury.io/js/@coaty%2Fconsensus.raft.svg)](https://www.npmjs.com/package/@coaty/consensus.raft)
 
 ## Table of Contents
 
